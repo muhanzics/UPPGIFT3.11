@@ -1,0 +1,19 @@
+{
+  "name": "Ai analyzer Dev Container",
+  "build": {
+      "dockerfile": "../Dockerfile"
+    },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "postCreateCommand": "pip3 install -r requirements.txt"
+}
