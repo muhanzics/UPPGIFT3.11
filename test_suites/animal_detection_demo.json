@@ -1,0 +1,89 @@
+{
+  "name": "animal_detection_demo",
+  "description": "Simple demo test suite for detecting animal mentions in text",
+  "tests": [
+    {
+      "id": "test_001",
+      "name": "Dog mention - positive",
+      "input_text": "I saw a golden retriever at the park today.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_002",
+      "name": "Cat mention - positive",
+      "input_text": "My cat loves to sleep on the windowsill.",
+      "question": "Does this text mention a cat?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_003",
+      "name": "No animal - negative",
+      "input_text": "I went to the store to buy groceries.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_004",
+      "name": "Cat not dog - negative",
+      "input_text": "My cat is very playful and energetic.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_005",
+      "name": "Puppy synonym - positive",
+      "input_text": "The puppy was wagging its tail happily.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_006",
+      "name": "Multiple animals",
+      "input_text": "At the zoo, I saw lions, elephants, and giraffes.",
+      "question": "Does this text mention any animals?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_007",
+      "name": "Dog name reference",
+      "input_text": "I met someone named Rex at the party.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": false,
+      "evaluation_type": "boolean",
+      "metadata": {
+        "note": "Tricky case - Rex is a common dog name but refers to a person here"
+      }
+    },
+    {
+      "id": "test_008",
+      "name": "Indirect dog reference",
+      "input_text": "I need to buy dog food from the pet store.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_009",
+      "name": "Fish mention",
+      "input_text": "I fed my goldfish this morning.",
+      "question": "Does this text mention a fish?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_010",
+      "name": "Bird mention",
+      "input_text": "A beautiful blue jay landed on my fence.",
+      "question": "Does this text mention a bird?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    }
+  ]
+}

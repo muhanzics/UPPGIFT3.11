@@ -1,0 +1,55 @@
+{
+  "name": "sentiment_analysis",
+  "description": "Test suite for sentiment analysis (positive/negative)",
+  "tests": [
+    {
+      "id": "sent_001",
+      "name": "Clearly positive",
+      "input_text": "This is the best product I've ever used! Absolutely amazing!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_002",
+      "name": "Clearly negative",
+      "input_text": "Terrible experience. Would not recommend to anyone.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_003",
+      "name": "Positive with minor complaint",
+      "input_text": "Overall great product, though shipping took a bit long.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": true,
+      "evaluation_type": "boolean",
+      "metadata": {
+        "note": "Mixed but leaning positive - tests nuance understanding"
+      }
+    },
+    {
+      "id": "sent_004",
+      "name": "Sarcasm - negative",
+      "input_text": "Oh great, another delay. Just what I needed today.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean",
+      "metadata": {
+        "note": "Tests sarcasm detection"
+      }
+    },
+    {
+      "id": "sent_005",
+      "name": "Neutral factual",
+      "input_text": "The package arrived on Tuesday at 3pm.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean",
+      "metadata": {
+        "note": "Neutral/factual should be negative for 'is positive' question"
+      }
+    }
+  ]
+}

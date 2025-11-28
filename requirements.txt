@@ -1,1 +1,6 @@
-ollama
+# Core dependencies
+requests>=2.31.0
+
+# Optional: for future enhancements
+# python-dotenv>=1.0.0  # for environment variables
+# rich>=13.0.0          # for better terminal output
