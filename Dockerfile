@@ -14,4 +14,11 @@ RUN curl https://ollama.com/install.sh | sh
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["/bin/bash"]
+# Expose Streamlit port
+EXPOSE 8501
+
+# Copy source code
+COPY . .
+
+CMD echo "\n\n\033[1;32m👉 OPEN THIS LINK: http://localhost:8501\033[0m\n\n" && \
+    streamlit run gui.py --server.address=0.0.0.0

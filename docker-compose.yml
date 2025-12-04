@@ -1,0 +1,29 @@
+services:
+  # Service 1: The Ollama Backend
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_backend
+    ports:
+      - "11434:11434"
+    # This command starts the server, waits for it, then downloads your default model
+    entrypoint: ["/bin/sh", "/pull-model.sh"]
+    volumes:
+      - ollama_data:/root/.ollama       # Persist models
+      - ./pull-model.sh:/pull-model.sh  # Mount the start-up script
+
+  # Service 2: Your Streamlit GUI
+  app:
+    build: .
+    container_name: llm_benchmark_gui
+    ports:
+      - "8501:8501"
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_HOST=ollama:11434
+    depends_on:
+      - ollama
+    volumes:
+      - .:/workspace
+
+volumes:
+  ollama_data:
