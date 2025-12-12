@@ -40,17 +40,17 @@ class TestSuiteLoader:
                 test_case = TestCase.from_dict(item)
                 test_cases.append(test_case)
             
-            print(f"✓ Loaded {len(test_cases)} test cases from {file_path}")
+            print(f"Loaded {len(test_cases)} test cases from {file_path}")
             return test_cases
             
         except FileNotFoundError:
-            print(f"✗ Test suite file not found: {file_path}")
+            print(f"Test suite file not found: {file_path}")
             return []
         except json.JSONDecodeError as e:
-            print(f"✗ Invalid JSON in test suite: {e}")
+            print(f"Invalid JSON in test suite: {e}")
             return []
         except Exception as e:
-            print(f"✗ Error loading test suite: {e}")
+            print(f"Error loading test suite: {e}")
             return []
     
     @staticmethod
@@ -71,10 +71,10 @@ class TestSuiteLoader:
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
             
-            print(f"✓ Saved {len(test_cases)} test cases to {file_path}")
+            print(f"Saved {len(test_cases)} test cases to {file_path}")
             
         except Exception as e:
-            print(f"✗ Error saving test suite: {e}")
+            print(f"Error saving test suite: {e}")
     
     @staticmethod
     def list_test_suites(directory: str = "test_suites") -> List[str]:
@@ -96,5 +96,5 @@ class TestSuiteLoader:
             return [str(f) for f in json_files]
             
         except Exception as e:
-            print(f"✗ Error listing test suites: {e}")
+            print(f"Error listing test suites: {e}")
             return []

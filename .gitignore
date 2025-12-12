@@ -20,6 +20,9 @@ wheels/
 .installed.cfg
 *.egg
 
+#Java
+target/
+
 # Virtual environments
 venv/
 ENV/

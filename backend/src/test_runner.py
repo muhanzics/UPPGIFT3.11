@@ -271,7 +271,7 @@ class TestRunner:
             results.append(result)
             
             if verbose:
-                status = "✓ PASS" if result.passed else "✗ FAIL"
+                status = "PASS" if result.passed else "FAIL"
                 print(f"  Expected: {result.expected_answer}")
                 print(f"  Actual: {result.actual_answer}")
                 print(f"  Time: {result.response_time:.2f}s")

@@ -143,11 +143,11 @@ class ResultsStorage:
                 ))
             
             conn.commit()
-            print(f"✓ Saved test run {summary.run_id} to database")
+            print(f"Saved test run {summary.run_id} to database")
             
         except Exception as e:
             conn.rollback()
-            print(f"✗ Error saving test run: {e}")
+            print(f"Error saving test run: {e}")
         finally:
             conn.close()
     
@@ -309,7 +309,7 @@ class ResultsStorage:
         conn.commit()
         conn.close()
         
-        print("✓ Database cleared successfully")
+        print("Database cleared successfully")
     
     def display_results_table(
         self, 
@@ -356,7 +356,7 @@ class ResultsStorage:
             expected = str(result['expected_answer'])[:15]
             actual = str(result['actual_answer'])[:15]
             time_str = f"{result['response_time']:.2f}s"
-            status = "✓ PASS" if result['passed'] else "✗ FAIL"
+            status = "PASS" if result['passed'] else "✗ FAIL"
             
             row = f"{i:<4} {test_name:<30} {expected:<15} {actual:<15} {time_str:<8} {status:<8}"
             print(row)
