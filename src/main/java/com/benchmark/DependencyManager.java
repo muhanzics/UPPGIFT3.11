@@ -1,75 +1,89 @@
 package com.benchmark;
 
 import java.io.*;
-import java.net.URL;
+import java.nio.file.*;
+import java.util.*;
 
 public class DependencyManager {
 
-    private static final String OLLAMA_URL_WIN = "https://ollama.com/download/OllamaSetup.exe";
+    private static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
-    // We assume the backend folder is next to the Java app
-    public static final String BACKEND_EXE = "backend/dist/backend/backend.exe";
+    // Updated paths based on your screenshot
+    private static final String BACKEND_DIR = "backend";
+    private static final String VENV_DIR = "backend/venv";
+    private static final String REQUIREMENTS_FILE = "backend/requirements.txt";
+    private static final String SERVER_SCRIPT = "backend/server.py";
+
+    // Virtual Environment Python Path
+    private static final String VENV_PYTHON = IS_WINDOWS ?
+            VENV_DIR + "/Scripts/python.exe" : VENV_DIR + "/bin/python";
 
     public interface ProgressCallback {
         void onProgress(String message, double progress);
     }
 
     public static void ensureEnvironmentReady(ProgressCallback callback) throws Exception {
-        if (!isOllamaInstalled()) {
-            callback.onProgress("Ollama not found. Downloading...", 0.3);
-            File installer = downloadOllamaInstaller();
-            callback.onProgress("Installing Ollama...", 0.6);
-            runInstaller(installer);
-            Thread.sleep(5000);
+        // 1. (Optional) Your existing Ollama check logic goes here...
+
+        // 2. Check for Virtual Environment
+        File venvExec = new File(VENV_PYTHON);
+        if (!venvExec.exists()) {
+            callback.onProgress("Initializing Python environment...", 0.4);
+            setupVirtualEnvironment();
+
+            callback.onProgress("Installing requirements from backend/requirements.txt...", 0.7);
+            installRequirements();
         } else {
-            callback.onProgress("Ollama is ready.", 0.5);
+            callback.onProgress("Python environment ready.", 0.8);
         }
 
-        // 2. Check Backend
-        File backend = new File(BACKEND_EXE);
-        if (!backend.exists()) {
-            // If this happens, your build is missing files
-            throw new FileNotFoundException("Backend executable not found at: " + backend.getAbsolutePath());
-        }
+        callback.onProgress("Backend systems verified.", 1.0);
+    }
 
-        callback.onProgress("Backend ready.", 1.0);
+    private static void setupVirtualEnvironment() throws Exception {
+        String pythonCmd = getSystemPython();
+        // Creates the 'venv' folder inside 'backend'
+        ProcessBuilder pb = new ProcessBuilder(pythonCmd, "-m", "venv", "venv");
+        pb.directory(new File(BACKEND_DIR));
+        executeProcess(pb, "Virtual Environment Creation");
+    }
+
+    private static void installRequirements() throws Exception {
+        // Run pip install using the python executable inside the venv
+        ProcessBuilder pb = new ProcessBuilder(VENV_PYTHON, "-m", "pip", "install", "-r", REQUIREMENTS_FILE);
+        executeProcess(pb, "Dependency Installation");
     }
 
     public static Process startBackendServer() throws IOException {
-        System.out.println("Starting backend from: " + new File(BACKEND_EXE).getAbsolutePath());
+        System.out.println("Launching Python API (server.py)...");
+        // We run 'python backend/server.py' using the venv interpreter
+        ProcessBuilder pb = new ProcessBuilder(VENV_PYTHON, SERVER_SCRIPT);
 
-        ProcessBuilder pb = new ProcessBuilder(BACKEND_EXE);
+        // This ensures relative imports in server.py (like from src.models) work
+        pb.directory(new File("."));
+
         pb.redirectErrorStream(true);
         return pb.start();
     }
 
-    public static void terminate() {
-        try {
-            new ProcessBuilder("Get-Process | Where-Object {$_.ProcessName -like '*ollama*'} | Stop-Process").start().waitFor();
+    // --- Utility Methods ---
+
+    private static String getSystemPython() throws IOException {
+        String[] cmds = IS_WINDOWS ? new String[]{"python", "py"} : new String[]{"python3", "python"};
+        for (String cmd : cmds) {
+            try {
+                Process p = new ProcessBuilder(cmd, "--version").start();
+                if (p.waitFor() == 0) return cmd;
+            } catch (Exception ignored) {}
         }
-        catch (Exception e) {
-            System.err.println("Ollama Terminate failed: " + e);
-        }
+        throw new IOException("Python 3 not found. Please ensure Python is installed and added to PATH.");
     }
 
-    // --- Helper Methods (Same as before) ---
-    private static boolean isOllamaInstalled() {
-        try { return new ProcessBuilder("ollama", "--version").start().waitFor() == 0; }
-        catch (Exception e) { return false; }
-    }
-
-    private static File downloadOllamaInstaller() throws IOException {
-        URL url = new URL(OLLAMA_URL_WIN);
-        File tempFile = File.createTempFile("OllamaSetup", ".exe");
-        try (InputStream in = url.openStream(); FileOutputStream out = new FileOutputStream(tempFile)) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(buffer)) != -1) out.write(buffer, 0, bytesRead);
+    private static void executeProcess(ProcessBuilder pb, String stepName) throws Exception {
+        pb.inheritIO();
+        Process p = pb.start();
+        if (p.waitFor() != 0) {
+            throw new RuntimeException(stepName + " failed. Check terminal for errors.");
         }
-        return tempFile;
-    }
-
-    private static void runInstaller(File installer) throws Exception {
-        new ProcessBuilder(installer.getAbsolutePath()).start().waitFor();
     }
 }
