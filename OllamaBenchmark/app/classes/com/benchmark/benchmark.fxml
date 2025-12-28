@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.benchmark.BenchmarkController"
+      spacing="15" styleClass="root-container">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Ollama LLM Benchmark Tool" styleClass="header-title"/>
+
+    <VBox spacing="10" styleClass="section">
+        <Label text="Configuration" styleClass="section-title"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Test Suite:" minWidth="100"/>
+            <TextField fx:id="testSuitePathField" promptText="Select test suite JSON file"
+                       HBox.hgrow="ALWAYS"/>
+            <Button fx:id="browseTestSuiteButton" text="Browse"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Export Path:" minWidth="100"/>
+            <TextField fx:id="exportPathField" promptText="Select export folder"
+                       HBox.hgrow="ALWAYS"/>
+            <Button fx:id="browseExportButton" text="Browse"/>
+        </HBox>
+    </VBox>
+
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <TitledPane fx:id="downloadedModelsPane" text="Downloaded Models"
+                        animated="false" collapsible="true" expanded="true"
+                        VBox.vgrow="ALWAYS">
+                <ListView fx:id="downloadedModelsList" VBox.vgrow="ALWAYS"/>
+            </TitledPane>
+        </VBox>
+
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <TitledPane fx:id="availableModelsPane" text="Available Models"
+                        animated="false" collapsible="true" expanded="true"
+                        VBox.vgrow="ALWAYS">
+                <ListView fx:id="availableModelsList" VBox.vgrow="ALWAYS"/>
+            </TitledPane>
+        </VBox>
+    </HBox>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button fx:id="refreshModelsButton" text="Refresh Models" styleClass="secondary-button"/>
+    </HBox>
+
+    <VBox spacing="10" styleClass="section">
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label text="Process Control:"/>
+            <Button fx:id="terminateButton" text="TERMINATE"
+                    onAction="#handleTerminate"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;">
+                <tooltip>
+                    <Tooltip text="Immediately stop all processes"/>
+                </tooltip>
+            </Button>
+            <Separator orientation="VERTICAL" />
+
+            <Label text="Temperature:"/>
+            <Slider fx:id="temperatureSlider" min="0.0" max="1.0" value="0.7"
+                    blockIncrement="0.1" majorTickUnit="0.1" minorTickCount="0"
+                    snapToTicks="true" prefWidth="150"/>
+            <Label fx:id="temperatureValueLabel" text="0.7" style="-fx-font-weight: bold;"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="runBenchmarkButton" text="Run Benchmark"
+                    styleClass="primary-button" defaultButton="true"/>
+        </HBox>
+
+        <ProgressBar fx:id="progressBar" progress="0" maxWidth="Infinity"/>
+        <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
+    </VBox>
+
+</VBox>
