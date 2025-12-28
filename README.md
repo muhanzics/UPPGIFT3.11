@@ -109,8 +109,8 @@ UPPGIFT3.11/
         └── cli.py                          # Terminal fallback interface
 ```
 
-### Troubleshooting
+## Troubleshooting
 
-### Alternatives if windows zip doesnt work
+### Alternatives if either zip doesnt work
 - Download source code, unzip it and run mvn clean package 
 
