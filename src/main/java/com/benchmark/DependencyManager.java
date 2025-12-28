@@ -1,8 +1,8 @@
 package com.benchmark;
 
 import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class DependencyManager {
 
@@ -14,54 +14,61 @@ public class DependencyManager {
     private static final String REQUIREMENTS_FILE = "backend/requirements.txt";
     private static final String SERVER_SCRIPT = "backend/server.py";
 
-    // Virtual Environment Python Path
-    private static final String VENV_PYTHON = IS_WINDOWS ?
-            VENV_DIR + "/Scripts/python.exe" : VENV_DIR + "/bin/python";
+    private static String getVenvPythonExecutable() {
+        // This logic runs EVERY time it's called, so it sees the new folders
+        Path scriptsPath = Paths.get(VENV_DIR, "Scripts", "python.exe");
+        Path binPath = Paths.get(VENV_DIR, "bin", "python.exe");
+        Path unixPath = Paths.get(VENV_DIR, "bin", "python");
+
+        if (scriptsPath.toFile().exists()) return scriptsPath.toAbsolutePath().toString();
+        if (binPath.toFile().exists()) return binPath.toAbsolutePath().toString();
+        if (unixPath.toFile().exists()) return unixPath.toAbsolutePath().toString();
+
+        // Fallback for the CREATION step if nothing exists yet
+        return IS_WINDOWS ? scriptsPath.toAbsolutePath().toString() : unixPath.toAbsolutePath().toString();
+    }
 
     public interface ProgressCallback {
         void onProgress(String message, double progress);
     }
 
     public static void ensureEnvironmentReady(ProgressCallback callback) throws Exception {
-        // 1. (Optional) Your existing Ollama check logic goes here...
+        File venvFolder = new File(VENV_DIR);
 
-        // 2. Check for Virtual Environment
-        File venvExec = new File(VENV_PYTHON);
-        if (!venvExec.exists()) {
-            callback.onProgress("Initializing Python environment...", 0.4);
+        if (!venvFolder.exists()) {
+            callback.onProgress("Creating Virtual Environment...", 0.3);
             setupVirtualEnvironment();
 
-            callback.onProgress("Installing requirements from backend/requirements.txt...", 0.7);
-            installRequirements();
-        } else {
-            callback.onProgress("Python environment ready.", 0.8);
+            // IMPORTANT: We don't check for VENV_PYTHON here because
+            // the method getVenvPythonExecutable() will now find it
+            // since setupVirtualEnvironment() just finished.
         }
 
-        callback.onProgress("Backend systems verified.", 1.0);
+        callback.onProgress("Installing requirements...", 0.6);
+        installRequirements(); // Inside here, call getVenvPythonExecutable()
+
+        callback.onProgress("Environment Ready!", 1.0);
     }
 
     private static void setupVirtualEnvironment() throws Exception {
         String pythonCmd = getSystemPython();
-        // Creates the 'venv' folder inside 'backend'
-        ProcessBuilder pb = new ProcessBuilder(pythonCmd, "-m", "venv", "venv");
-        pb.directory(new File(BACKEND_DIR));
+        // Use absolute path for the venv directory to avoid confusion
+        File venvLocation = new File(VENV_DIR);
+
+        ProcessBuilder pb = new ProcessBuilder(pythonCmd, "-m", "venv", venvLocation.getAbsolutePath());
         executeProcess(pb, "Virtual Environment Creation");
     }
 
     private static void installRequirements() throws Exception {
-        // Run pip install using the python executable inside the venv
-        ProcessBuilder pb = new ProcessBuilder(VENV_PYTHON, "-m", "pip", "install", "-r", REQUIREMENTS_FILE);
+        String pythonExec = getVenvPythonExecutable(); // Freshly resolved path
+        ProcessBuilder pb = new ProcessBuilder(pythonExec, "-m", "pip", "install", "-r", REQUIREMENTS_FILE);
         executeProcess(pb, "Dependency Installation");
     }
 
     public static Process startBackendServer() throws IOException {
-        System.out.println("Launching Python API (server.py)...");
-        // We run 'python backend/server.py' using the venv interpreter
-        ProcessBuilder pb = new ProcessBuilder(VENV_PYTHON, SERVER_SCRIPT);
-
-        // This ensures relative imports in server.py (like from src.models) work
+        String pythonExec = getVenvPythonExecutable();
+        ProcessBuilder pb = new ProcessBuilder(pythonExec, SERVER_SCRIPT);
         pb.directory(new File("."));
-
         pb.redirectErrorStream(true);
         return pb.start();
     }
