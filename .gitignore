@@ -56,5 +56,6 @@ Thumbs.db
 OLD/*.pyc
 OLD/__pycache__/
 
+.github
 # Keep test suites but ignore user-created ones if needed
 # test_suites/custom_*

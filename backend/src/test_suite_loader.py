@@ -1,3 +1,6 @@
+# Muhaned Mahdi
+# Enes Özbek
+
 """
 Utility functions for loading and managing test suites.
 """
@@ -10,24 +13,23 @@ from .models import TestCase, EvaluationType
 
 
 class TestSuiteLoader:
-    """Loads and manages test suites from JSON files."""
+    """loads and manages test suites from json files."""
     
     @staticmethod
     def load_test_suite(file_path: str) -> List[TestCase]:
         """
-        Load a test suite from a JSON file.
+        load a test suite from a json file.
         
-        Args:
-            file_path: Path to JSON file
+        args:
+            file_path: path to json file
             
-        Returns:
-            List of TestCase objects
+        returns:
+            list of testcase objects
         """
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
-            # Support both array of tests and object with 'tests' key
             if isinstance(data, list):
                 test_data = data
             elif isinstance(data, dict) and 'tests' in data:
@@ -56,11 +58,11 @@ class TestSuiteLoader:
     @staticmethod
     def save_test_suite(test_cases: List[TestCase], file_path: str):
         """
-        Save a test suite to a JSON file.
+        save a test suite to a json file.
         
-        Args:
-            test_cases: List of TestCase objects
-            file_path: Path to save to
+        args:
+            test_cases: list of testcase objects
+            file_path: path to save to
         """
         try:
             data = {
@@ -79,13 +81,13 @@ class TestSuiteLoader:
     @staticmethod
     def list_test_suites(directory: str = "test_suites") -> List[str]:
         """
-        List all test suite files in a directory.
+        list all test suite files in a directory.
         
-        Args:
-            directory: Directory to search
+        args:
+            directory: directory to search
             
-        Returns:
-            List of test suite file paths
+        returns:
+            list of test suite file paths
         """
         try:
             path = Path(directory)

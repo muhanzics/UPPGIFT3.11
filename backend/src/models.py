@@ -1,5 +1,8 @@
+# Muhaned Mahdi
+# Enes Özbek
+
 """
-Core data models for LLM benchmarking system.
+data models for LLM benchmarking system.
 """
 
 from dataclasses import dataclass, field
@@ -9,29 +12,29 @@ from enum import Enum
 
 
 class EvaluationType(Enum):
-    """Types of evaluation methods for test cases."""
-    BOOLEAN = "boolean"              # True/False comparison
-    EXACT_MATCH = "exact_match"      # Exact string match
-    CONTAINS = "contains"            # Check if response contains keyword
-    REGEX = "regex"                  # Regex pattern matching
-    JSON_FIELD = "json_field"        # Compare specific JSON field
+    """types of evaluation methods for test cases."""
+    BOOLEAN = "boolean"
+    EXACT_MATCH = "exact_match"
+    CONTAINS = "contains"
+    REGEX = "regex"         
+    JSON_FIELD = "json_field"  
 
 
 @dataclass
 class TestCase:
     """
-    Represents a single test case for benchmarking an LLM.
+    represents a single test case for benchmarking an LLM.
     
-    Attributes:
-        id: Unique identifier for the test
-        name: Human-readable test name
-        input_text: Text input to send to the model
-        question: Question/instruction for the model
-        expected_answer: Expected response from the model
-        evaluation_type: How to evaluate the response
-        system_prompt: Optional custom system prompt
-        few_shot_examples: Optional list of example Q&A pairs
-        metadata: Additional test metadata
+    attributes:
+        id: unique identifier for the test
+        name: human-readable test name
+        input_text: text input to send to the model
+        question: question/instruction for the model
+        expected_answer: expected response from the model
+        evaluation_type: how to evaluate the response
+        system_prompt: optional custom system prompt
+        few_shot_examples: optional list of example q&a pairs
+        metadata: additional test metadata
     """
     id: str
     name: str
@@ -44,7 +47,7 @@ class TestCase:
     metadata: Dict[str, Any] = field(default_factory=dict)
     
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
+        """convert to dictionary for json serialization."""
         return {
             "id": self.id,
             "name": self.name,
@@ -59,7 +62,7 @@ class TestCase:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'TestCase':
-        """Create TestCase from dictionary."""
+        """create testcase from dictionary."""
         eval_type = data.get("evaluation_type", "boolean")
         if isinstance(eval_type, str):
             eval_type = EvaluationType(eval_type)
@@ -80,15 +83,15 @@ class TestCase:
 @dataclass
 class ModelConfig:
     """
-    Configuration for an LLM model.
+    configuration for an LLM model.
     
-    Attributes:
-        name: Model name (e.g., "qwen3:4b-instruct")
-        temperature: Sampling temperature (0.0-1.0)
-        top_p: Nucleus sampling parameter
-        top_k: Top-k sampling parameter
-        num_ctx: Context window size
-        other_params: Additional Ollama parameters
+    attributes:
+        name: model name (e.g., "qwen3:4b-instruct")
+        temperature: sampling temperature (0.0-1.0)
+        top_p: nucleus sampling parameter
+        top_k: top-k sampling parameter
+        num_ctx: context window size
+        other_params: additional ollama parameters
     """
     name: str
     temperature: Optional[float] = None
@@ -97,16 +100,17 @@ class ModelConfig:
     num_ctx: Optional[int] = None
     other_params: Dict[str, Any] = field(default_factory=dict)
     
+    # converts AI parameters (temperature, top_p, etc.) to the format ollama API expects
     def to_ollama_options(self) -> Dict[str, Any]:
-        """Convert to Ollama API options format."""
+        """convert to ollama api options format."""
         options = {}
-        if self.temperature is not None:
+        if self.temperature is not None:  # controls randomness/creativity of responses (0.0 = deterministic, 1.0 = creative)
             options["temperature"] = self.temperature
-        if self.top_p is not None:
+        if self.top_p is not None:  # nucleus sampling parameter
             options["top_p"] = self.top_p
-        if self.top_k is not None:
+        if self.top_k is not None:  # top-k sampling parameter
             options["top_k"] = self.top_k
-        if self.num_ctx is not None:
+        if self.num_ctx is not None:  # context window size
             options["num_ctx"] = self.num_ctx
         options.update(self.other_params)
         return options

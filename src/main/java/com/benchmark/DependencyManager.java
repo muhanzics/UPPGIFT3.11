@@ -1,3 +1,6 @@
+// Muhaned Mahdi
+// Enes Özbek
+
 package com.benchmark;
 
 import java.io.*;
@@ -20,9 +23,12 @@ public class DependencyManager {
         Path binPath = Paths.get(VENV_DIR, "bin", "python.exe");
         Path unixPath = Paths.get(VENV_DIR, "bin", "python");
 
-        if (scriptsPath.toFile().exists()) return scriptsPath.toAbsolutePath().toString();
-        if (binPath.toFile().exists()) return binPath.toAbsolutePath().toString();
-        if (unixPath.toFile().exists()) return unixPath.toAbsolutePath().toString();
+        if (scriptsPath.toFile().exists())
+            return scriptsPath.toAbsolutePath().toString();
+        if (binPath.toFile().exists())
+            return binPath.toAbsolutePath().toString();
+        if (unixPath.toFile().exists())
+            return unixPath.toAbsolutePath().toString();
 
         // Fallback for the CREATION step if nothing exists yet
         return IS_WINDOWS ? scriptsPath.toAbsolutePath().toString() : unixPath.toAbsolutePath().toString();
@@ -76,12 +82,14 @@ public class DependencyManager {
     // --- Utility Methods ---
 
     private static String getSystemPython() throws IOException {
-        String[] cmds = IS_WINDOWS ? new String[]{"python", "py"} : new String[]{"python3", "python"};
+        String[] cmds = IS_WINDOWS ? new String[] { "python", "py" } : new String[] { "python3", "python" };
         for (String cmd : cmds) {
             try {
                 Process p = new ProcessBuilder(cmd, "--version").start();
-                if (p.waitFor() == 0) return cmd;
-            } catch (Exception ignored) {}
+                if (p.waitFor() == 0)
+                    return cmd;
+            } catch (Exception ignored) {
+            }
         }
         throw new IOException("Python 3 not found. Please ensure Python is installed and added to PATH.");
     }

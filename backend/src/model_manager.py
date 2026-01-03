@@ -1,3 +1,6 @@
+# Muhaned Mahdi
+# Enes Özbek
+
 """
 Model manager for interacting with Ollama API.
 """
@@ -9,14 +12,14 @@ from .models import ModelConfig
 
 
 class ModelManager:
-    """Manages Ollama models - listing, testing, configuration."""
+    """manages ollama models - listing, testing, configuration."""
 
     def __init__(self, ollama_url: str = "http://localhost:11434"):
         """
-        Initialize ModelManager.
+        initialize modelmanager.
 
-        Args:
-            ollama_url: Base URL for Ollama API
+        args:
+            ollama_url: base url for ollama api
         """
         self.ollama_url = ollama_url
         self.api_endpoint = f"{ollama_url}/api/generate"
@@ -25,10 +28,10 @@ class ModelManager:
 
     def test_connection(self) -> bool:
         """
-        Test connection to Ollama server.
+        test connection to ollama server.
 
-        Returns:
-            True if connection successful, False otherwise
+        returns:
+            true if connection successful, false otherwise
         """
         try:
             response = requests.get(self.tags_endpoint, timeout=5)
@@ -41,10 +44,10 @@ class ModelManager:
 
     def list_models(self) -> List[str]:
         """
-        List all available Ollama models.
+        list all available ollama models.
 
-        Returns:
-            List of model names
+        returns:
+            list of model names
         """
         try:
             response = requests.get(self.tags_endpoint, timeout=5)
@@ -60,26 +63,26 @@ class ModelManager:
 
     def model_exists(self, model_name: str) -> bool:
         """
-        Check if a specific model is available.
+        check if a specific model is available.
 
-        Args:
-            model_name: Name of the model to check
+        args:
+            model_name: name of the model to check
 
-        Returns:
-            True if model exists, False otherwise
+        returns:
+            true if model exists, false otherwise
         """
         models = self.list_models()
         return model_name in models
 
     def get_model_info(self, model_name: str) -> Optional[Dict[str, Any]]:
         """
-        Get detailed information about a model.
+        get detailed information about a model.
 
-        Args:
-            model_name: Name of the model
+        args:
+            model_name: name of the model
 
-        Returns:
-            Model information dictionary or None if not found
+        returns:
+            model information dictionary or none if not found
         """
         try:
             response = requests.get(self.tags_endpoint, timeout=5)
@@ -98,11 +101,10 @@ class ModelManager:
 
     def pull_model_generator(self, model_name: str):
         """
-        Generator that yields progress updates from Ollama.
+        generator that yields progress updates from ollama.
         """
         print(f"Starting pull generator for: {model_name}")
         try:
-            # Now self.pull_endpoint is defined!
             response = requests.post(
                 self.pull_endpoint,
                 json={"name": model_name},
@@ -117,36 +119,38 @@ class ModelManager:
 
         except requests.exceptions.RequestException as e:
             print(f"Error pulling model {model_name}: {e}")
-            # json is now imported, so this won't crash
             yield json.dumps({"error": str(e)}).encode('utf-8')
 
+    # sends a prompt to the AI model via ollama api and returns its response
     def generate_response(
         self,
         prompt: str,
         model_config: ModelConfig
     ) -> Optional[str]:
         """
-        Generate a response from the model.
+        generate a response from the model.
 
-        Args:
-            prompt: The prompt to send to the model
-            model_config: Model configuration
+        args:
+            prompt: the prompt to send to the model
+            model_config: model configuration
 
-        Returns:
-            Model response text or None if error
+        returns:
+            model response text or None if error
         """
         try:
+            # prepare the request payload for ollama api
             payload = {
                 "model": model_config.name,
                 "prompt": prompt,
                 "stream": False
             }
 
-            # Add optional parameters if specified
+            # add AI parameters like temperature to control model behavior
             options = model_config.to_ollama_options()
             if options:
                 payload["options"] = options
 
+            # make the http request to ollama with a timeout for long model responses
             response = requests.post(
                 self.api_endpoint,
                 json=payload,
@@ -154,6 +158,7 @@ class ModelManager:
             )
             response.raise_for_status()
 
+            # extract the text response from the api result
             result = response.json()
             return result.get('response', '')
 

@@ -1,5 +1,8 @@
+# Muhaned Mahdi
+# Enes Özbek
+
 """
-Test runner - executes test cases against LLM models.
+test runner - executes test cases against LLM models.
 """
 
 import time
@@ -13,48 +16,45 @@ from .model_manager import ModelManager
 
 
 class TestRunner:
-    """Runs test cases against LLM models and evaluates results."""
+    """runs test cases against LLM models and evaluates results."""
     
     def __init__(self, model_manager: ModelManager):
         """
-        Initialize TestRunner.
+        initialize TestRunner.
         
-        Args:
+        args:
             model_manager: ModelManager instance for API calls
         """
         self.model_manager = model_manager
-    
+    # creates the prompt that gets sent to the AI model
     def build_prompt(
         self, 
         test_case: TestCase, 
         include_few_shot: bool = True
     ) -> str:
         """
-        Build the complete prompt for a test case.
+        build the complete prompt for a test case.
         
-        Args:
+        args:
             test_case: The test case to build prompt for
             include_few_shot: Whether to include few-shot examples
             
-        Returns:
-            Complete formatted prompt
+        returns:
+            complete formatted prompt
         """
         parts = []
         
-        # Add system prompt if provided
         if test_case.system_prompt:
             parts.append(test_case.system_prompt)
-            parts.append("")  # Blank line
+            parts.append("")
         
-        # Add few-shot examples if requested and available
-        if include_few_shot and test_case.few_shot_examples:
+        if include_few_shot and test_case.few_shot_examples: # if the user decides to use few-shot examples to see the differences. 
             parts.append("Examples:")
             for example in test_case.few_shot_examples:
                 parts.append(f"Input: {example.get('input', '')}")
                 parts.append(f"Output: {example.get('output', '')}")
                 parts.append("")
         
-        # Add the actual test input
         parts.append("Text:")
         parts.append(test_case.input_text)
         parts.append("")
@@ -66,34 +66,33 @@ class TestRunner:
         
         return "\n".join(parts)
     
+    # extracts the AIs answer from its raw text response, then handles different formats the model might return
     def parse_response(
         self, 
         response_text: str, 
         evaluation_type: EvaluationType
     ) -> Any:
         """
-        Parse the model's response to extract the answer.
+        parse the model's response to extract the answer.
         
-        Args:
-            response_text: Raw response from model
-            evaluation_type: Type of evaluation to determine parsing
+        args:
+            response_text: raw response from model
+            evaluation_type: type of evaluation to determine parsing
             
-        Returns:
-            Parsed answer value
+        returns:
+            parsed answer value
         """
-        # Try to extract JSON from response
         try:
-            # Look for JSON object in response
+            # look for json object in the models response
             json_match = re.search(r'\{[^}]+\}', response_text, re.DOTALL)
             
             if json_match:
                 json_str = json_match.group(0)
                 data = json.loads(json_str)
                 
-                # Get the answer field
                 answer = data.get('answer')
                 
-                # Convert based on evaluation type
+                # convert the answer based on what type of evaluation is expected
                 if evaluation_type == EvaluationType.BOOLEAN:
                     if isinstance(answer, bool):
                         return answer
@@ -104,7 +103,7 @@ class TestRunner:
                 else:
                     return answer
             else:
-                # No JSON found, try to extract boolean from text
+                # no json found, try to extract boolean from plain text if needed
                 if evaluation_type == EvaluationType.BOOLEAN:
                     lower_text = response_text.lower()
                     if 'true' in lower_text or 'yes' in lower_text:
@@ -112,11 +111,9 @@ class TestRunner:
                     elif 'false' in lower_text or 'no' in lower_text:
                         return False
                 
-                # Return the full response if can't parse
                 return response_text.strip()
                 
         except json.JSONDecodeError:
-            # Failed to parse JSON, return raw response
             return response_text.strip()
         except Exception as e:
             print(f"Warning: Error parsing response: {e}")
@@ -141,7 +138,6 @@ class TestRunner:
         """
         try:
             if evaluation_type == EvaluationType.BOOLEAN:
-                # Convert both to boolean and compare
                 expected_bool = bool(expected) if not isinstance(expected, str) else expected.lower() in ['true', 'yes', '1']
                 actual_bool = bool(actual) if not isinstance(actual, str) else actual.lower() in ['true', 'yes', '1']
                 return expected_bool == actual_bool
@@ -157,11 +153,9 @@ class TestRunner:
                 return pattern.search(str(actual)) is not None
             
             elif evaluation_type == EvaluationType.JSON_FIELD:
-                # For now, just do equality check
                 return expected == actual
             
             else:
-                # Default to equality
                 return expected == actual
                 
         except Exception as e:
@@ -192,25 +186,23 @@ class TestRunner:
         passed = False
         
         try:
-            # Build the prompt
             prompt = self.build_prompt(test_case, include_few_shot)
             
-            # Call the model
+            # send the prompt to the AI model and get its response
             raw_response = self.model_manager.generate_response(
                 prompt, 
                 model_config
             )
             
             if raw_response is None:
-                raise Exception("Model returned None response")
+                raise Exception("model returned None response")
             
-            # Parse the response
+            # extract the actual answer from the AIs response text
             actual_answer = self.parse_response(
                 raw_response, 
                 test_case.evaluation_type
             )
             
-            # Evaluate the result
             passed = self.evaluate_result(
                 test_case.expected_answer,
                 actual_answer,

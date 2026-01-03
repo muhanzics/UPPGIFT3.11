@@ -1,3 +1,6 @@
+# Muhaned Mahdi
+# Enes Özbek
+
 """
 Results storage using SQLite database.
 """
@@ -12,24 +15,23 @@ from .models import TestResult, TestRunSummary
 
 
 class ResultsStorage:
-    """Manages storage and retrieval of test results in SQLite."""
+    """manages storage and retrieval of test results in sqlite."""
     
     def __init__(self, db_path: str = "benchmark_results.db"):
         """
-        Initialize ResultsStorage.
+        initialize resultsstorage.
         
-        Args:
-            db_path: Path to SQLite database file
+        args:
+            db_path: path to sqlite database file
         """
         self.db_path = db_path
         self.init_database()
     
     def init_database(self):
-        """Initialize database schema."""
+        """initialize database schema."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Test results table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS test_results (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,7 +50,6 @@ class ResultsStorage:
             )
         ''')
         
-        # Test runs summary table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS test_runs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,7 +66,6 @@ class ResultsStorage:
             )
         ''')
         
-        # Create indexes for better query performance
         cursor.execute('''
             CREATE INDEX IF NOT EXISTS idx_test_results_run_id 
             ON test_results(run_id)
@@ -90,17 +90,16 @@ class ResultsStorage:
         results: List[TestResult]
     ):
         """
-        Save a complete test run with all results.
+        save a complete test run with all results.
         
-        Args:
-            summary: Test run summary
-            results: List of individual test results
+        args:
+            summary: test run summary
+            results: list of individual test results
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
         try:
-            # Save summary
             cursor.execute('''
                 INSERT INTO test_runs (
                     run_id, model_name, test_suite_name, total_tests,
@@ -120,7 +119,6 @@ class ResultsStorage:
                 summary.timestamp.isoformat()
             ))
             
-            # Save individual results
             for result in results:
                 cursor.execute('''
                     INSERT INTO test_results (
@@ -327,7 +325,6 @@ class ResultsStorage:
             results = self.get_test_results(run_id)
             title = f"TEST RESULTS FOR RUN: {run_id}"
         else:
-            # Get latest run
             runs = self.get_test_runs(limit=1)
             if not runs:
                 print("No test results found in database.")
@@ -345,12 +342,10 @@ class ResultsStorage:
         print(title)
         print(f"{'='*150}")
         
-        # Table header
         header = f"{'#':<4} {'Test Name':<30} {'Expected':<15} {'Actual':<15} {'Time':<8} {'Status':<8}"
         print(header)
         print("-" * 150)
         
-        # Print results
         for i, result in enumerate(results[:limit], 1):
             test_name = (result['test_name'][:27] + "...") if len(result['test_name']) > 30 else result['test_name']
             expected = str(result['expected_answer'])[:15]

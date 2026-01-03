@@ -1,3 +1,6 @@
+// Muhaned Mahdi
+// Enes Özbek
+
 package com.benchmark;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -31,18 +34,30 @@ import java.util.stream.Collectors;
 public class BenchmarkController {
 
     // FXML Components
-    @FXML private TextField testSuitePathField;
-    @FXML private Button browseTestSuiteButton;
-    @FXML private TextField exportPathField;
-    @FXML private Button browseExportButton;
-    @FXML private ListView<String> downloadedModelsList;
-    @FXML private ListView<String> availableModelsList;
-    @FXML private Button refreshModelsButton;
-    @FXML private Button runBenchmarkButton;
-    @FXML private ProgressBar progressBar;
-    @FXML private Label statusLabel;
-    @FXML private Slider temperatureSlider;
-    @FXML private Label temperatureValueLabel;
+    @FXML
+    private TextField testSuitePathField;
+    @FXML
+    private Button browseTestSuiteButton;
+    @FXML
+    private TextField exportPathField;
+    @FXML
+    private Button browseExportButton;
+    @FXML
+    private ListView<String> downloadedModelsList;
+    @FXML
+    private ListView<String> availableModelsList;
+    @FXML
+    private Button refreshModelsButton;
+    @FXML
+    private Button runBenchmarkButton;
+    @FXML
+    private ProgressBar progressBar;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Slider temperatureSlider;
+    @FXML
+    private Label temperatureValueLabel;
 
     // Observable Lists
     private final ObservableList<String> downloadedModels = FXCollections.observableArrayList();
@@ -74,9 +89,8 @@ public class BenchmarkController {
 
     private void setupTemperatureSlider() {
         if (temperatureSlider != null) {
-            temperatureSlider.valueProperty().addListener((obs, oldVal, newVal) ->
-                    temperatureValueLabel.setText(String.format("%.1f", newVal))
-            );
+            temperatureSlider.valueProperty()
+                    .addListener((obs, oldVal, newVal) -> temperatureValueLabel.setText(String.format("%.1f", newVal)));
         }
     }
 
@@ -111,8 +125,7 @@ public class BenchmarkController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Test Suite");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("JSON Files", "*.json")
-        );
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
 
         File file = fileChooser.showOpenDialog(getStage());
         if (file != null) {
@@ -205,7 +218,8 @@ public class BenchmarkController {
                         HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
-                    return objectMapper.readValue(response.body(), new TypeReference<>() {});
+                    return objectMapper.readValue(response.body(), new TypeReference<>() {
+                    });
                 } else {
                     throw new IOException("Server returned " + response.statusCode());
                 }
@@ -218,8 +232,7 @@ public class BenchmarkController {
             @Override
             protected Void call() throws Exception {
                 String jsonBody = objectMapper.writeValueAsString(
-                        Map.of("model_name", modelName)
-                );
+                        Map.of("model_name", modelName));
 
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(API_URL + "/models/pull"))
@@ -283,8 +296,7 @@ public class BenchmarkController {
                 Map<String, Object> payload = Map.of(
                         "model_name", selectedModel,
                         "suite_path", testSuitePathField.getText(),
-                        "temperature", temperature
-                );
+                        "temperature", temperature);
 
                 String jsonBody = objectMapper.writeValueAsString(payload);
 
@@ -305,8 +317,8 @@ public class BenchmarkController {
                 }
 
                 List<Map<String, Object>> results = objectMapper.readValue(
-                        response.body(), new TypeReference<>() {}
-                );
+                        response.body(), new TypeReference<>() {
+                        });
 
                 updateProgress(1, 1);
                 updateMessage("Saving results...");
@@ -415,8 +427,7 @@ public class BenchmarkController {
     private File generateOutputFile(String modelName) {
         String safeModelName = modelName.replaceAll("[^a-zA-Z0-9.-]", "_");
         String timestamp = LocalDateTime.now().format(
-                DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
-        );
+                DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         String filename = "benchmark_" + safeModelName + "_" + timestamp + ".csv";
         return new File(exportPathField.getText(), filename);
     }
@@ -495,8 +506,7 @@ public class BenchmarkController {
 
                 // Other popular models
                 "orca-mini:3b", "orca-mini:7b", "openchat:7b", "vicuna:7b",
-                "neural-chat:7b", "starling-lm:7b", "yi-coder:1.5b", "yi-coder:9b"
-        );
+                "neural-chat:7b", "starling-lm:7b", "yi-coder:1.5b", "yi-coder:9b");
     }
 
     private void showAlert(String title, String content, Alert.AlertType alertType) {

@@ -13,4 +13,4 @@ Adhere to the following principles:
 Always:
 
 - When instructions are unclear or erroneous, always ask for clarification before proceeding
-- Find out what the best practices are for the topic at hand as of 2025 from official and relevant sources
+- Find out what the best practices are for the topic at hand as of 2025 from official and relevant sources 
