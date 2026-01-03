@@ -6,6 +6,7 @@ Utility functions for loading and managing test suites.
 """
 
 import json
+import csv
 from typing import List, Dict, Any
 from pathlib import Path
 
@@ -100,3 +101,60 @@ class TestSuiteLoader:
         except Exception as e:
             print(f"Error listing test suites: {e}")
             return []
+    
+    @staticmethod
+    def load_few_shot_from_csv(file_path: str) -> List[Dict[str, str]]:
+        """
+        load few-shot examples from a csv file.
+        
+        expected csv format:
+        input,output
+        "example input text","expected output"
+        
+        args:
+            file_path: path to csv file
+            
+        returns:
+            list of few-shot example dictionaries
+        """
+        try:
+            examples = []
+            with open(file_path, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if 'input' in row and 'output' in row:
+                        examples.append({
+                            'input': row['input'],
+                            'output': row['output']
+                        })
+            
+            print(f"Loaded {len(examples)} few-shot examples from {file_path}")
+            return examples
+            
+        except FileNotFoundError:
+            print(f"Few-shot CSV file not found: {file_path}")
+            return []
+        except Exception as e:
+            print(f"Error loading few-shot examples: {e}")
+            return []
+    
+    @staticmethod
+    def apply_few_shot_to_suite(
+        test_cases: List[TestCase], 
+        few_shot_examples: List[Dict[str, str]]
+    ) -> List[TestCase]:
+        """
+        apply few-shot examples to all test cases in a suite.
+        
+        args:
+            test_cases: list of testcase objects
+            few_shot_examples: list of few-shot example dictionaries
+            
+        returns:
+            updated list of testcase objects with few-shot examples
+        """
+        for test_case in test_cases:
+            test_case.few_shot_examples = few_shot_examples
+        
+        print(f"Applied {len(few_shot_examples)} few-shot examples to {len(test_cases)} tests")
+        return test_cases

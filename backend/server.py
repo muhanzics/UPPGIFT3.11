@@ -53,9 +53,14 @@ class TestRunRequest(BaseModel):
     model_name: str
     suite_path: str
     temperature: float = 0.0
+    few_shot_path: str = None  # optional path to few-shot csv
+    use_few_shot: bool = False  # enable/disable few-shot
 
 class PullModelRequest(BaseModel):
     model_name: str
+
+class FewShotLoadRequest(BaseModel):
+    csv_path: str
 
 # --- Endpoints ---
 
@@ -113,12 +118,22 @@ def run_benchmark(request: TestRunRequest):
             raise HTTPException(status_code=400, detail="Test suite is empty or invalid JSON.")
         print(f"Loaded {len(suites)} test cases.")
 
+        # 2.5. Load and apply few-shot examples if provided
+        if request.use_few_shot and request.few_shot_path:
+            if os.path.exists(request.few_shot_path):
+                print(f"Loading few-shot examples from {request.few_shot_path}")
+                few_shot_examples = loader.load_few_shot_from_csv(request.few_shot_path)
+                if few_shot_examples:
+                    suites = loader.apply_few_shot_to_suite(suites, few_shot_examples)
+            else:
+                print(f"Warning: Few-shot CSV not found at {request.few_shot_path}")
+
         # 3. Configure Model
         config = ModelConfig(name=request.model_name, temperature=request.temperature)
 
-        # 4. Run Benchmark
+        # 4. Run Benchmark (include_few_shot controlled by use_few_shot flag)
         print("Starting test execution (this may take time)...")
-        results = runner.run_test_suite(suites, config, verbose=True)
+        results = runner.run_test_suite(suites, config, include_few_shot=request.use_few_shot, verbose=True)
         print("Benchmark execution complete.")
 
         # 5. Calculate Statistics for DB Summary
@@ -149,6 +164,28 @@ def run_benchmark(request: TestRunRequest):
 
         # 7. Return to Client
         # Using .to_dict() from your models.py TestResult class
+@app.post("/few-shot/load")
+def load_few_shot(request: FewShotLoadRequest):
+    """
+    load few-shot examples from a csv file.
+    returns the examples for preview/validation.
+    """
+    try:
+        if not os.path.exists(request.csv_path):
+            raise HTTPException(status_code=400, detail=f"CSV file not found: {request.csv_path}")
+        
+        examples = loader.load_few_shot_from_csv(request.csv_path)
+        
+        return {
+            "success": True,
+            "count": len(examples),
+            "examples": examples
+        }
+    
+    except Exception as e:
+        print(f"Error loading few-shot CSV: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
         response_data = [r.to_dict() for r in results]
         return response_data
 
