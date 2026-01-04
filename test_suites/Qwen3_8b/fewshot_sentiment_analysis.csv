@@ -1,0 +1,5 @@
+input,output
+"Text: ""Oh wonderful, another Monday morning meeting that could have been an email. My favorite!"" Question: Is the sentiment of this text positive?",false
+"Text: ""You've really outdone yourself this time - I didn't think it was possible to make it worse, but here we are."" Question: Is the sentiment of this text positive?",false
+"Text: ""I'm thrilled to finally be done with this nightmare of a project."" Question: Is the sentiment of this text positive?",false
+"Text: ""The customer service team went above and beyond to resolve my issue quickly and professionally."" Question: Is the sentiment of this text positive?",true

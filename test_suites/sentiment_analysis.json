@@ -22,7 +22,7 @@
       "id": "sent_003",
       "name": "Positive with minor complaint",
       "input_text": "Overall great product, though shipping took a bit long.",
-      "question": "Is the sentiment of this text positive?",
+      "question": "Is the sentiment of this text overall positive?",
       "expected_answer": true,
       "evaluation_type": "boolean"
     },
@@ -30,7 +30,7 @@
       "id": "sent_004",
       "name": "Sarcasm - negative",
       "input_text": "Oh great, another delay. Just what I needed today.",
-      "question": "Is the sentiment of this text positive?",
+      "question": "Is the sentiment of this text overall positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
     },
@@ -38,8 +38,8 @@
       "id": "sent_005",
       "name": "Neutral factual",
       "input_text": "The package arrived on Tuesday at 3pm.",
-      "question": "Is the sentiment of this text positive?",
-      "expected_answer": false,
+      "question": "Is the sentiment of this text neutral?",
+      "expected_answer": true,
       "evaluation_type": "boolean"
     },
     {
@@ -62,7 +62,7 @@
       "id": "sent_008",
       "name": "Negative event with positive reaction",
       "input_text": "My car broke down, but the tow truck driver was incredibly helpful and kind.",
-      "question": "Is the sentiment of this text positive?",
+      "question": "Was the tow truck driver's behavior overall positive?",
       "expected_answer": true,
       "evaluation_type": "boolean"
     },
@@ -77,23 +77,23 @@
     {
       "id": "sent_010",
       "name": "Lowered expectations met",
-      "input_text": "Well, at least it didn't break immediately like the last one.",
+      "input_text": "I guess it works, if you set your expectations low enough.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
     },
     {
       "id": "sent_011",
-      "name": "Positive spin on negative",
-      "input_text": "Sure, I lost my job, but at least now I have time to pursue my hobbies.",
+      "name": "Negation of positive",
+      "input_text": "This movie is not as entertaining as I had hoped.",
       "question": "Is the sentiment of this text positive?",
-      "expected_answer": true,
+      "expected_answer": false,
       "evaluation_type": "boolean"
     },
     {
       "id": "sent_012",
       "name": "Damning with faint praise",
-      "input_text": "I suppose it works if you don't have high standards.",
+      "input_text": "I suppose it works if you don't have high standards. But I wouldn't call it good.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
@@ -119,21 +119,21 @@
       "name": "Excited about leaving",
       "input_text": "I'm so excited that my shift is finally over and I can leave this place!",
       "question": "Is the sentiment of this text positive?",
-      "expected_answer": false,
+      "expected_answer": true,
       "evaluation_type": "boolean"
     },
     {
       "id": "sent_016",
-      "name": "Grateful for problem ending",
-      "input_text": "Thank goodness this ordeal is finally over.",
+      "name": "Double negation positive",
+      "input_text": "I can't say I didn't enjoy the film.",
       "question": "Is the sentiment of this text positive?",
-      "expected_answer": false,
+      "expected_answer": true,
       "evaluation_type": "boolean"
     },
     {
       "id": "sent_017",
-      "name": "Could be worse fallacy",
-      "input_text": "It's not great, but I've seen worse, so I'll keep it.",
+      "name": "Contrast with but - negative wins",
+      "input_text": "The visuals were stunning, but the story was painfully boring. And the cast were just heartless.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
@@ -148,9 +148,9 @@
     },
     {
       "id": "sent_019",
-      "name": "Negatives that prevent worse outcome",
-      "input_text": "The flight was delayed for three hours, but we avoided the thunderstorm, so I'm grateful.",
-      "question": "Is the sentiment of this text positive?",
+      "name": "Contrast with but - positive wins",
+      "input_text": "The pacing was slow, but the ending made it all worthwhile.",
+      "question": "Is the sentiment of this text overall positive?",
       "expected_answer": true,
       "evaluation_type": "boolean"
     },
@@ -197,7 +197,7 @@
     {
       "id": "sent_025",
       "name": "Happy despite product",
-      "input_text": "I'm having a great day even though this product is terrible.",
+      "input_text": "I'm having a great day even though this product is terrible. Wish I hadn't bought it.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
@@ -213,7 +213,7 @@
     {
       "id": "sent_027",
       "name": "Positive comparison to nothing",
-      "input_text": "It's better than not having anything at all, I suppose.",
+      "input_text": "It's better than not having anything at all, I suppose. Really do not recommend it though.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
@@ -221,7 +221,7 @@
     {
       "id": "sent_028",
       "name": "Technical compliment emotional criticism",
-      "input_text": "The build quality is solid, but it makes me miserable to use every day.",
+      "input_text": "The build quality is solid, but it makes me miserable to use every day, and I dread turning it on.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
       "evaluation_type": "boolean"
@@ -231,7 +231,7 @@
       "name": "Surprised by basic functionality",
       "input_text": "I'm amazed it actually turned on when I pressed the button!",
       "question": "Is the sentiment of this text positive?",
-      "expected_answer": false,
+      "expected_answer": true,
       "evaluation_type": "boolean"
     },
     {

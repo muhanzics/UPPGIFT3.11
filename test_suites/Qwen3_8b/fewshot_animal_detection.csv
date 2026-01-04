@@ -1,0 +1,5 @@
+input,output
+"Text: ""I need to address the 800-pound gorilla in this negotiation before we proceed."" Question: Does this text mention a gorilla?",false
+"Text: ""She was so busy chasing wild geese with that theory, she missed the obvious answer."" Question: Does this text mention a goose?",false
+"Text: ""He's been my scapegoat for every project failure this year."" Question: Does this text mention a goat?",false
+"Text: ""I took my beagle to the veterinarian for his annual checkup yesterday."" Question: Does this text have anything to do with a dog?",true

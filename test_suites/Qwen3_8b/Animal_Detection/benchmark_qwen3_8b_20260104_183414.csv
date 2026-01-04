@@ -1,0 +1,2 @@
+test_id,test_name,model_name,expected_answer,actual_answer,raw_response,passed,response_time,timestamp,error
+test_001,Dog mention - positive,qwen3:8b,True,True,"{""answer"": true}",True,10.698318004608154,2026-01-04T18:34:14.822123,

@@ -17,7 +17,6 @@ from pathlib import Path
 from datetime import datetime
 import csv
 
-# direct imports from backend
 from backend.src.model_manager import ModelManager
 from backend.src.test_runner import TestRunner
 from backend.src.test_suite_loader import TestSuiteLoader

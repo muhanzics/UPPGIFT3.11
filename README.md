@@ -107,15 +107,16 @@ Results are saved in two places:
 ## Troubleshooting
 
 **"Could not connect to Ollama"**
-- Make sure Ollama is installed and running
-- Try running `ollama serve` manually in a terminal
+- The app will prompt you to start Ollama automatically
+- If that fails, manually open a terminal and run: `ollama serve`
+- Then restart the application
 
 **"No module named 'customtkinter'"**
 - Run: `pip install -r backend/requirements.txt`
 
 **Models not showing up**
-- Click "Refresh Models" button
-- Check Ollama is running: `ollama list`
+- Click the "Refresh Models" button in the application
+- If still not working, restart the application
 
 ## Project Structure
 
@@ -124,7 +125,6 @@ UPPGIFT3.11/
 ├── gui_app.py                  # Main application
 ├── backend/
 │   ├── requirements.txt        # Python dependencies
-│   ├── server.py              # FastAPI server (optional)
 │   └── src/
 │       ├── model_manager.py   # Ollama API interface
 │       ├── test_runner.py     # Test execution logic
@@ -138,20 +138,3 @@ UPPGIFT3.11/
 ## Authors
 
 Muhaned Mahdi & Enes Özbek
-
-    ├── server.py                           # FastAPI / Uvicorn API Server
-    ├── requirements.txt                    # Python dependencies
-    └── src/                                # Core logic source code
-        ├── models.py                       # Data structures (TestCase, TestResult)
-        ├── model_manager.py                # Ollama API interaction logic
-        ├── test_runner.py                  # Test execution and evaluation
-        ├── results_storage.py              # SQLite database operations
-        ├── test_suite_loader.py            # JSON file parsing
-        └── cli.py                          # Terminal fallback interface
-```
-
-## Troubleshooting
-
-### Alternatives if either zip doesnt work
-- Download source code, unzip it and run mvn clean package 
-

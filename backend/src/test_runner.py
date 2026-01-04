@@ -61,8 +61,15 @@ class TestRunner:
         parts.append("Question:")
         parts.append(test_case.question)
         parts.append("")
-        parts.append("Respond with JSON only in this format:")
-        parts.append('{"answer": <your answer>}')
+        
+        # provide specific format instructions based on evaluation type
+        if test_case.evaluation_type == EvaluationType.BOOLEAN:
+            parts.append("Respond with JSON only in this exact format:")
+            parts.append('{"answer": true} or {"answer": false}')
+            parts.append("Use only true or false, nothing else.")
+        else:
+            parts.append("Respond with JSON only in this format:")
+            parts.append('{"answer": <your answer>}')
         
         return "\n".join(parts)
     
