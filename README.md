@@ -1,44 +1,71 @@
-# LLM Benchmarking System
+# LLM Benchmarking Tool
 
-**Simple tool to test and compare different AI models on your own test cases.**
-
-## What This Does
-
-You give it:
-
-1. A test suite (JSON file with questions and expected answers)
-2. An AI model to test (from Ollama)
-
-It gives you:
-
-- How accurate the model is (% of correct answers)
-- How fast it responds (seconds per test)
-- Which tests passed/failed
-- Historical comparison between different models
+Simple Python application to benchmark and compare AI models from Ollama on custom test suites.
 
 ## Prerequisites
-- Java
-- Python (Preferably from python.org)
-- Ollama (Installs automatically if not present)
 
-## Quick Start
+1. **Python 3.8+**
+2. **Ollama** - Download from [ollama.com](https://ollama.com/download)
 
-- Download windows or linux zip folders in the release page
-- Unzip it and in the same folder run: ```java -jar ollama-benchmark-tool-1.0-SNAPSHOT.jar```.
+## Installation
 
-### After installation and environment setup
+### Windows
 
-- Select test suite path
-- Select export path for results
-- Select a model from **Downloaded Models** or download a new one
-- Select model temperature
-- Run benchmark
+```powershell
+# Clone or download this repository
+cd UPPGIFT3.11
 
-## How It Works
+# Install dependencies
+pip install -r backend/requirements.txt
 
-### 1. Test Suite Format
+# Run the application
+python gui_app.py
+```
 
-Create a JSON file like following:
+### Linux/Mac
+
+```bash
+# Clone or download this repository
+cd UPPGIFT3.11
+
+# Install dependencies
+pip install -r backend/requirements.txt
+
+# Install Ollama (if not already installed)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Run the application
+python gui_app.py
+```
+
+## How to Use
+
+1. **Launch** - Run `python gui_app.py`
+   - The app will automatically start Ollama if needed
+   - If Ollama isn't installed, you'll be prompted to download it
+
+2. **Select Test Suite** - Click "Browse" next to "Test Suite" and choose a JSON file
+   - Example test suites are in the `test_suites/` folder
+
+3. **Select Export Path** - Choose where to save the results CSV file
+
+4. **Select a Model**:
+   - From "Downloaded Models" (models already on your system)
+   - OR click a model in "Available Models" to download it
+
+5. **(Optional) Few-Shot Prompting**:
+   - Browse for a CSV file with example input/output pairs
+   - Enable the toggle to use few-shot learning
+
+6. **Adjust Temperature** (0.0-1.0):
+   - Lower = more deterministic/consistent
+   - Higher = more creative/random
+
+7. **Run Benchmark** - Click the green button
+
+## Test Suite Format
+
+Create a JSON file like this:
 
 ```json
 {
@@ -56,48 +83,62 @@ Create a JSON file like following:
 }
 ```
 
-**Test fields:**
+**Evaluation types:**
+- `"boolean"` - true/false answers
+- `"exact_match"` - exact text match
+- `"contains"` - check if answer contains a keyword
 
-- `input_text`: The text to analyze
-- `question`: What you're asking the model
-- `expected_answer`: What the correct answer should be
-- `evaluation_type`: How to check if answer is correct
-  - `"boolean"` = true/false
-  - `"exact_match"` = exact text match
-  - `"contains"` = check if answer contains keyword
+## Few-Shot CSV Format
 
+For few-shot prompting, create a CSV with two columns:
 
-**(Example test suites are found in source code UPPGIFT3.11/test_suites)**
+```csv
+input,output
+"The cat is sleeping","animal: cat, action: sleeping"
+"The dog is barking","animal: dog, action: barking"
+```
 
-### 2. Running Tests
+## Results
 
-The system:
+Results are saved in two places:
+1. **CSV file** - In your chosen export folder with timestamp
+2. **SQLite database** - `benchmark_results.db` (for historical tracking)
 
-1. Takes your test case
-2. Builds a prompt: text + question + "respond with JSON"
-3. Sends to the AI model
-4. Parses the response
-5. Compares actual vs expected answer
-6. Records if it passed/failed + how long it took
+## Troubleshooting
 
-### 3. Results Storage
+**"Could not connect to Ollama"**
+- Make sure Ollama is installed and running
+- Try running `ollama serve` manually in a terminal
 
-Everything is saved to `benchmark_results.db` (SQLite database):
+**"No module named 'customtkinter'"**
+- Run: `pip install -r backend/requirements.txt`
 
-- Individual test results
-- Summary statistics per run
-- Historical data for comparison
-
-Each test is also saved and exported as a csv file. 
+**Models not showing up**
+- Click "Refresh Models" button
+- Check Ollama is running: `ollama list`
 
 ## Project Structure
 
 ```
 UPPGIFT3.11/
-├── ollama-benchmark-tool-1.0-SNAPSHOT.jar  # Main JavaFX application launcher
-├── benchmark_results.db                    # SQLite Database (Auto-created)
-└── backend/                                # Python Backend Environment
-    ├── venv/                               # Python Virtual Environment
+├── gui_app.py                  # Main application
+├── backend/
+│   ├── requirements.txt        # Python dependencies
+│   ├── server.py              # FastAPI server (optional)
+│   └── src/
+│       ├── model_manager.py   # Ollama API interface
+│       ├── test_runner.py     # Test execution logic
+│       ├── test_suite_loader.py
+│       ├── results_storage.py # SQLite database handler
+│       └── models.py          # Data models
+├── test_suites/               # Example test suites
+└── benchmark_results.db       # Results database (auto-created)
+```
+
+## Authors
+
+Muhaned Mahdi & Enes Özbek
+
     ├── server.py                           # FastAPI / Uvicorn API Server
     ├── requirements.txt                    # Python dependencies
     └── src/                                # Core logic source code

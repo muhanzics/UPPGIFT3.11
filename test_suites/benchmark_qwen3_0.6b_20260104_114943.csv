@@ -1,0 +1,11 @@
+test_id,test_name,model_name,expected_answer,actual_answer,raw_response,passed,response_time,timestamp,error
+test_001,Dog mention - positive,qwen3:0.6b,True,True,"{""answer"": true}",True,47.145713090896606,2026-01-04T11:49:18.191739,
+test_002,Cat mention - positive,qwen3:0.6b,True,True,"{""answer"": ""yes""}",True,2.5515260696411133,2026-01-04T11:49:20.743265,
+test_003,No animal - negative,qwen3:0.6b,False,False,"{""answer"": ""no""}",True,2.7696752548217773,2026-01-04T11:49:23.512940,
+test_004,Cat not dog - negative,qwen3:0.6b,False,False,"{""answer"": ""false""}",True,2.959268808364868,2026-01-04T11:49:26.472209,
+test_005,Puppy synonym - positive,qwen3:0.6b,True,True,"{""answer"": ""yes""}",True,2.862633466720581,2026-01-04T11:49:29.334843,
+test_006,Multiple animals,qwen3:0.6b,True,True,"{""answer"": ""yes""}",True,2.7378854751586914,2026-01-04T11:49:32.072728,
+test_007,Dog name reference,qwen3:0.6b,False,False,"{""answer"": ""false""}",True,2.9267578125,2026-01-04T11:49:34.999486,
+test_008,Indirect dog reference,qwen3:0.6b,True,True,"{""answer"": ""yes""}",True,2.7664084434509277,2026-01-04T11:49:37.765894,
+test_009,Fish mention,qwen3:0.6b,True,True,"{""answer"": ""yes""}",True,2.6963412761688232,2026-01-04T11:49:40.462236,
+test_010,Bird mention,qwen3:0.6b,True,True,"{""answer"": ""yes""}",True,2.787170648574829,2026-01-04T11:49:43.249406,
