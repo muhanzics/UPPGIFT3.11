@@ -1,6 +1,6 @@
 {
   "name": "animal_detection_demo",
-  "description": "Simple demo test suite for detecting animal mentions in text",
+  "description": "Challenging test suite for detecting animal mentions with ambiguous contexts",
   "tests": [
     {
       "id": "test_001",
@@ -56,10 +56,7 @@
       "input_text": "I met someone named Rex at the party.",
       "question": "Does this text have anything to do with a dog?",
       "expected_answer": false,
-      "evaluation_type": "boolean",
-      "metadata": {
-        "note": "Tricky case - Rex is a common dog name but refers to a person here"
-      }
+      "evaluation_type": "boolean"
     },
     {
       "id": "test_008",
@@ -83,6 +80,166 @@
       "input_text": "A beautiful blue jay landed on my fence.",
       "question": "Does this text mention a bird?",
       "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_011",
+      "name": "Dog breed as surname",
+      "input_text": "Dr. Shepherd will see you now in room 3.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_012",
+      "name": "Animal metaphor - not actual animal",
+      "input_text": "He's such a lone wolf in the workplace, never collaborates with anyone.",
+      "question": "Does this text mention a wolf?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_013",
+      "name": "Bird sports team",
+      "input_text": "The Eagles won the championship last night with a stunning comeback.",
+      "question": "Does this text mention a bird?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_014",
+      "name": "Fish but asking about cat",
+      "input_text": "My cat knocked over the aquarium and now there's water everywhere. The fish are fine though.",
+      "question": "Is this primarily about a fish problem?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_015",
+      "name": "Dog barking consequence",
+      "input_text": "I can't sleep because my neighbor's dog keeps barking. I need to find earplugs.",
+      "question": "Is this a sleep problem?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_016",
+      "name": "Computer mouse not animal",
+      "input_text": "My mouse isn't working properly and I can't click anything.",
+      "question": "Does this text mention a mouse (the animal)?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_017",
+      "name": "Butterfly effect idiom",
+      "input_text": "This small change could have a butterfly effect on the entire project.",
+      "question": "Does this text mention a butterfly?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_018",
+      "name": "Cat scan medical",
+      "input_text": "The doctor ordered a CAT scan to check for any abnormalities.",
+      "question": "Does this text mention a cat?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_019",
+      "name": "Elephant in the room idiom",
+      "input_text": "Nobody wants to talk about the elephant in the room during the meeting.",
+      "question": "Does this text mention an elephant?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_020",
+      "name": "Chicken out idiom",
+      "input_text": "I wanted to go skydiving but I chickened out at the last minute.",
+      "question": "Does this text mention a chicken?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_021",
+      "name": "Snake game not animal",
+      "input_text": "I spent hours playing Snake on my old Nokia phone.",
+      "question": "Does this text mention a snake?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_022",
+      "name": "Fox brand name",
+      "input_text": "I watched an interesting documentary on Fox News yesterday.",
+      "question": "Does this text mention a fox?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_023",
+      "name": "Dead fish analogy",
+      "input_text": "The project is like a dead fish - it's been sitting there for weeks with no progress.",
+      "question": "Is this about a fish problem?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_024",
+      "name": "Crocodile tears idiom",
+      "input_text": "She's just crying crocodile tears to get sympathy, she doesn't really care.",
+      "question": "Does this text mention a crocodile?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_025",
+      "name": "Bull market financial",
+      "input_text": "The stock market is in a bull market with prices rising steadily.",
+      "question": "Does this text mention a bull?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_026",
+      "name": "Literal dog but wrong question focus",
+      "input_text": "While walking my dog, I tripped on the sidewalk and hurt my ankle badly.",
+      "question": "Is this primarily about an injury?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_027",
+      "name": "Copy cat idiom",
+      "input_text": "He's such a copycat, always imitating what others do.",
+      "question": "Does this text mention a cat?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_028",
+      "name": "Whale of a time idiom",
+      "input_text": "We had a whale of a time at the party last night!",
+      "question": "Does this text mention a whale?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_029",
+      "name": "Dog-eared book not dog",
+      "input_text": "The book was dog-eared and worn from years of reading.",
+      "question": "Does this text have anything to do with a dog?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "test_030",
+      "name": "Red herring not fish",
+      "input_text": "The detective realized the suspect's alibi was just a red herring.",
+      "question": "Does this text mention a fish?",
+      "expected_answer": false,
       "evaluation_type": "boolean"
     }
   ]

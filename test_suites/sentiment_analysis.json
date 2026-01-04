@@ -1,6 +1,6 @@
 {
   "name": "sentiment_analysis",
-  "description": "Test suite for sentiment analysis (positive/negative)",
+  "description": "Challenging test suite for sentiment analysis with ambiguous and nuanced contexts",
   "tests": [
     {
       "id": "sent_001",
@@ -24,10 +24,7 @@
       "input_text": "Overall great product, though shipping took a bit long.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": true,
-      "evaluation_type": "boolean",
-      "metadata": {
-        "note": "Mixed but leaning positive - tests nuance understanding"
-      }
+      "evaluation_type": "boolean"
     },
     {
       "id": "sent_004",
@@ -35,10 +32,7 @@
       "input_text": "Oh great, another delay. Just what I needed today.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
-      "evaluation_type": "boolean",
-      "metadata": {
-        "note": "Tests sarcasm detection"
-      }
+      "evaluation_type": "boolean"
     },
     {
       "id": "sent_005",
@@ -46,10 +40,207 @@
       "input_text": "The package arrived on Tuesday at 3pm.",
       "question": "Is the sentiment of this text positive?",
       "expected_answer": false,
-      "evaluation_type": "boolean",
-      "metadata": {
-        "note": "Neutral/factual should be negative for 'is positive' question"
-      }
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_006",
+      "name": "Backhanded compliment",
+      "input_text": "It's nice to see you're finally doing something productive for once.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_007",
+      "name": "Positive words in negative context",
+      "input_text": "I love how this company keeps finding new ways to disappoint me.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_008",
+      "name": "Negative event with positive reaction",
+      "input_text": "My car broke down, but the tow truck driver was incredibly helpful and kind.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_009",
+      "name": "Complaint disguised as question",
+      "input_text": "I'm wondering why anyone would think this is acceptable quality?",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_010",
+      "name": "Lowered expectations met",
+      "input_text": "Well, at least it didn't break immediately like the last one.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_011",
+      "name": "Positive spin on negative",
+      "input_text": "Sure, I lost my job, but at least now I have time to pursue my hobbies.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_012",
+      "name": "Damning with faint praise",
+      "input_text": "I suppose it works if you don't have high standards.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_013",
+      "name": "Double negative sarcasm",
+      "input_text": "Not the worst thing I've ever seen, I guess.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_014",
+      "name": "Positive about competitor",
+      "input_text": "I returned this and bought the competitor's product instead. Much happier now!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_015",
+      "name": "Excited about leaving",
+      "input_text": "I'm so excited that my shift is finally over and I can leave this place!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_016",
+      "name": "Grateful for problem ending",
+      "input_text": "Thank goodness this ordeal is finally over.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_017",
+      "name": "Could be worse fallacy",
+      "input_text": "It's not great, but I've seen worse, so I'll keep it.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_018",
+      "name": "Ironic enthusiasm",
+      "input_text": "Wow, I just love waiting on hold for 45 minutes! What a fantastic use of my time!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_019",
+      "name": "Negatives that prevent worse outcome",
+      "input_text": "The flight was delayed for three hours, but we avoided the thunderstorm, so I'm grateful.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_020",
+      "name": "Regretful purchase",
+      "input_text": "I wish I had read the reviews before buying this.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_021",
+      "name": "Positive expectations violated",
+      "input_text": "I had high hopes for this, but it didn't live up to the hype at all.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_022",
+      "name": "Relief from anxiety",
+      "input_text": "I was so worried it would break, but it's still working after a month!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": true,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_023",
+      "name": "Comparison to garbage",
+      "input_text": "I've used better products that came free in cereal boxes.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_024",
+      "name": "Passive aggressive praise",
+      "input_text": "Congratulations on meeting the absolute bare minimum requirements!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_025",
+      "name": "Happy despite product",
+      "input_text": "I'm having a great day even though this product is terrible.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_026",
+      "name": "Learned lesson negative",
+      "input_text": "Well, I learned my lesson about buying cheap electronics.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_027",
+      "name": "Positive comparison to nothing",
+      "input_text": "It's better than not having anything at all, I suppose.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_028",
+      "name": "Technical compliment emotional criticism",
+      "input_text": "The build quality is solid, but it makes me miserable to use every day.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_029",
+      "name": "Surprised by basic functionality",
+      "input_text": "I'm amazed it actually turned on when I pressed the button!",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
+    },
+    {
+      "id": "sent_030",
+      "name": "Optimistic about future negative",
+      "input_text": "Maybe the next version will fix all these problems. For now, it's unusable.",
+      "question": "Is the sentiment of this text positive?",
+      "expected_answer": false,
+      "evaluation_type": "boolean"
     }
   ]
 }
